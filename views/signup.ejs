@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>회원가입</title>
+  </head>
+  <body>
+    <form action="/signup" onsubmit="return validate()" method="post">
+      <input 
+        type="email",
+        name="email",
+        placeholder="email",
+      />
+      <input
+        id="pw", 
+        type="password",
+        name="password",
+        placeholder="password",
+      />
+      <input
+        id="confirm_pw",
+        type="password",
+        placeholder="password",
+      />
+      <input type="submit" value="회원가입" />
+    </form>
+  </body>
+  <script type="text/javascript">
+    if ("<%= message %>") {
+      alert("<%= message %>");
+    }
+
+    function validate() {
+      const pw = document.getElementById("pw").value;
+      const confirm_pw = document.getElementById("confirm_pw").value;
+
+      if (pw !== confirm_pw) {
+        alert("비밀번호가 일치하지 않습니다");
+        return false;
+      } else {
+        return true;
+      }
+    }
+  </script>
+</html>
