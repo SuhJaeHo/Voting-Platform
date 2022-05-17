@@ -6,3 +6,11 @@ body {
 a {
   color: #00B7FF;
 }
+
+.voteInfo {
+  width: 50vw;
+  height: 5vh;
+  line-height: 5vh;
+  text-align: center;
+  border: 1px solid black;
+}

@@ -8,7 +8,7 @@ require("dotenv").config();
 const index = require("./routes/index");
 const signup = require("./routes/signup");
 const login = require("./routes/login");
-//const votings = require("./routes/votings");
+const votings = require("./routes/votings");
 //const myVotings = require("./routes/my-votings");
 
 const session = require("express-session");
@@ -39,7 +39,7 @@ app.use(passport.session());
 app.use("/", index);
 app.use("/login", login);
 app.use("/signup", signup);
-//app.use("/votings", votings);
+app.use("/votings", votings);
 //app.use("/my-votings", myVotings);
 
 app.use(function(req, res, next) {

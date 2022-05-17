@@ -5,11 +5,25 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <h1>메인 페이지</h1>
-    <% for (const vote of votes) { %>
-      <div>
-        <div><%= vote.title %></div>
-      </div>
-    <% } %>
+    <div>
+      <% for (const vote of votes) { %>
+        <div class="voteInfo" onclick="location.href='/votings/<%= vote._id %>'",>
+          <span><%= vote.title %></spn>
+          <span><%= vote.creatorEmail %></span>
+          <span><%= vote.expiredTime %></span>
+          <span><%= vote.isFinished %></span>
+        </div>
+      <% } %>
+    </div>
+    <div>
+      <button
+        onclick="location.href='/votings/new';",
+      >
+        투표생성
+      </button>
+    </div>
   </body>
+  <script type="text/javascript">
+
+  </script>
 </html>

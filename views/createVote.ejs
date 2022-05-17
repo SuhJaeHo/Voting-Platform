@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <div>
+      <form action="/" onsubmit="return validate()" method="post">
+        <div>
+          <input 
+            type="text",
+            name="title",
+            placeholder="제목을 입력하세요",
+          />
+        </div>
+        <div>
+          <input
+            class="options"
+            type="text",
+            name="options",
+            placeholder="선택지 내용을 입력하세요",
+          />
+        </div>
+        <div>
+          <input
+            class="options"
+            type="text",
+            name="options",
+            placeholder="선택지 내용을 입력하세요",
+          />
+        </div>
+        <div>
+          <input 
+            type="datetime-local",
+            name="expiredTime",
+          />
+        </div>
+        <div>
+          <input type="submit" value="확인" />
+        </div>
+      </form>
+    </div>
+  </body>
+  <script type="text/javascript">
+    function validate() {
+      const options = document.getElementsByClassName("options");
+      const expiredTime = new Date(document.getElementsByName("expiredTime")[0].value);
+      const currentTime = new Date();
+      
+      if (currentTime.getTime() > expiredTime.getTime()) {
+        alert("만료 시간을 올바르게 설정해주세요");
+        return false;
+      }
+      
+      for (const option of options) {
+        if (option.value === "") {
+          alert("선택지 내용을 입력하세요");
+          return false;
+        }
+      }
+
+      return true;
+    }
+  </script>
+</html>
