@@ -5,7 +5,7 @@
   </head>
   <body>
     <div>
-      <form action="/votings/new" onsubmit="return validate()" method="post">
+      <form action="/votings/new" onsubmit="return validate()" method="post" id="form">
         <div>
           <input 
             type="text",
@@ -39,9 +39,26 @@
           <input type="submit" value="확인" />
         </div>
       </form>
+      <div>
+        <button onclick="addOption()">옵션 추가</button>
+        <button onclick="removeOption()">옵션 삭제</button>
+      </div>
     </div>
   </body>
   <script type="text/javascript">
+    function addOption() {
+      const form = document.getElementById("form");
+      const div = document.createElement("div");
+      
+      div.innerHTML = "<input class='options' type='text' name='options' placeholder='선택지 내용을 입력하세요' />";      
+      form.insertBefore(div, form.getElementsByTagName("div")[3]);
+    }
+
+    function removeOption() {
+      const form = document.getElementById("form");
+      form.getElementsByTagName("div").length === 5 ? alert("선택지는 최소 2개 필요합니다") : form.removeChild(form.getElementsByTagName("div")[form.getElementsByTagName("div").length - 3]);
+    }
+
     function validate() {
       const options = document.getElementsByClassName("options");
       const expiredTime = new Date(document.getElementsByName("expiredTime")[0].value);

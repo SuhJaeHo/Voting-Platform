@@ -2,6 +2,12 @@
 <html>
   <head></head>
   <body>
-    
+    <% for (const vote of createdVotes) { %>
+    <div onclick="location.href='/votings/<%= vote._id %>'">
+      <div><%= vote.title %></div>
+      <div><%= vote.isExpired %></div>
+      <div><%= vote.expiredTime %></div>
+    </div>    
+    <% } %>
   </body>
 </html>
