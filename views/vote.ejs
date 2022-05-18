@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div>
+      <div>
+        <%= vote.title %>
+      </div>
+      <div>
+        <form action="/votings/<%= vote._id %>" onsubmit="return validate()" method="post">
+          <% vote.options.forEach((option, index) => { %>
+            <label>
+              <input
+                type="radio"
+                name="option" 
+                value="<%= [index, Object.keys(option)[0]] %>"
+              />
+              <% if (vote.isExpired || vote.creatorId === userId) { %>
+                <span><%= Object.keys(option)[0] %></span>
+                <span><%= option[Object.keys(option)[0]] %></span><span>표</span>
+              <% } else { %>
+                <%= Object.keys(option)[0] %>
+              <% } %>
+              <br />
+            </label>
+          <% }) %>
+          <input type="submit" value="투표" />
+        </form>
+      </div>
+      <div>
+        <button onclick="location.href='/'">투표목록</button>
+      </div>
+      <% if (vote.creatorId === userId) { %>
+        <div>
+          <button onclick="remove()">삭제</button>
+        </div>
+      <% } %>
+    </div>
+  </body>
+  <script type="text/javascript">
+    if (("<%= vote.isExpired %>") === "true") {   
+      for (const element of document.getElementsByName("option")) {
+        element.disabled = true;
+      }
+    }
+
+    function remove() {
+      fetch("/votings/delete/<%= vote._id %>", { method: "DELETE" })
+      .then(() => {
+        alert("투표를 삭제하셨습니다");
+        location.href="/";
+      })
+      .catch(() => alert("다시 시도해주세요"));
+    }
+
+    function validate() {
+      if (("<%= vote.isExpired %>") === "true") {
+        alert("종료된 투표입니다");
+        return false;
+      }
+
+      if (!"<%= userId %>") {
+        alert("로그인 후에 이용가능합니다");
+        location.href="/login";
+        return false;
+      }
+
+      if ("<%= isVoted %>" === "true") {
+        alert("이미 투표를 완료하셨습니다");
+        return false;
+      }
+    }
+  </script>
+</html>

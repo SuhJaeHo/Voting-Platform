@@ -6,8 +6,8 @@ const voteSchema = new mongoose.Schema({
   participants: { type: Array, default: [] },
   title: { type: String, required: true },
   options: { type: Array },
+  isExpired: { type: Boolean, default: false },
   expiredTime: { type: Date, required: true },
-  isFinished: { type: Boolean, default: false },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Vote", voteSchema);

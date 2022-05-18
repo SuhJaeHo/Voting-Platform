@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/", (req, res, next) => {
   try {
-    res.render("login", { message: null });
+    res.render("login", { message: null, from: req.headers.referer });
   } catch (err) {
     next(err);
   }
