@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html>
   <head></head>
+  <link rel="stylesheet" href="/stylesheets/vote.css" />
   <body>
     <div>
-      <div>
-        <%= vote.title %>
+      <div class="title_outline">
+        <p><%= vote.title %></p>
+        <p>투표 만료시간 : <%= vote.expiredTime %></p>
+        <p><%= vote.isExpired ? "투표완료" : "투표 진행중" %></p>
       </div>
       <div>
         <form action="/votings/<%= vote._id %>" onsubmit="return validate()" method="post">
-          <% vote.options.forEach((option, index) => { %>
-            <label>
-              <input
-                type="radio"
-                name="option" 
-                value="<%= [index, Object.keys(option)[0]] %>"
-              />
-              <% if (vote.isExpired || vote.creatorId === userId) { %>
-                <span><%= Object.keys(option)[0] %></span>
-                <span><%= option[Object.keys(option)[0]] %></span><span>표</span>
-              <% } else { %>
-                <%= Object.keys(option)[0] %>
-              <% } %>
-              <br />
-            </label>
-          <% }) %>
+          <div class="options_outline">
+            <% vote.options.forEach((option, index) => { %>
+              <label>
+                <input
+                  type="radio"
+                  name="option"
+                  value="<%= [index, Object.keys(option)[0]] %>"
+                />
+                <% if (vote.isExpired === true && vote.creatorId === userId) { %>
+                  <span><%= Object.keys(option)[0] %></span>
+                  <span><%= option[Object.keys(option)[0]] %></span><span>표</span>
+                <% } else if (vote.isExpired === true) { %>
+                  <span><%= Object.keys(option)[0] %></span>
+                  <span><%= option[Object.keys(option)[0]] %></span><span>표</span>
+                <% } else { %>
+                  <%= Object.keys(option)[0] %>
+                <% } %>
+                <br />
+              </label>
+            <% }) %>
+          </div>
           <input type="submit" value="투표" />
         </form>
       </div>
@@ -38,14 +46,16 @@
     </div>
   </body>
   <script type="text/javascript">
-    if (("<%= vote.isExpired %>") === "true") {   
+    if (("<%= vote.isExpired %>") === "true") {
       for (const element of document.getElementsByName("option")) {
         element.disabled = true;
       }
     }
 
     function remove() {
-      fetch("/votings/delete/<%= vote._id %>", { method: "DELETE" })
+      fetch("/votings/delete/<%= vote._id %>", {
+        method: "DELETE" 
+      })
       .then(() => {
         alert("투표를 삭제하셨습니다");
         location.href="/";

@@ -9,7 +9,7 @@ exports.localLogin = async(req, res, next) => {
     }
 
     if (!user) {
-      return res.render("login", { message: info.message });
+      return res.render("login", { message: info.message, from: null });
     }
 
     return req.login(user, (loginError) => {

@@ -4,7 +4,7 @@ const { messages } = require("../constants/messages");
 const saltSize = 10;
 
 exports.createUser = async(req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
 
   try {
     const user = await User.findOne({ email }).lean();
@@ -21,9 +21,10 @@ exports.createUser = async(req, res, next) => {
       await User.create({
         email,
         password: hashedPassword,
+        name: username,
       });
 
-      return res.render("login", { message: null });
+      return res.render("login", { message: null, from: null });
     })
   } catch (err) {
     next(err);

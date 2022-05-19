@@ -1,20 +1,21 @@
 const Vote = require("../models/Vote");
 const User = require("../models/User");
+const { dateFormat } = require("../utils/dateFormat");
 
 exports.createVoting = async(req, res, next) => {
-  const { options, title, expiredTime } = req.body;
-  const { _id, email } = req.user;
+  const { option, title, expiredTime } = req.body;
+  const { _id, name } = req.user;
   const optionsArr = [];
 
-  for (const option of options) {
-    optionsArr.push({ [option]: 0 });
+  for (const optionName of option) {
+    optionsArr.push({ [optionName]: 0 });
   }
 
   if (req.user) {
     try {
       const newVote = new Vote({
-        creatorId: _id,
-        creatorEmail: email,
+        creatorId: req.user._id,
+        creatorName: name,
         title,
         options: optionsArr,
         expiredTime, 
@@ -24,8 +25,7 @@ exports.createVoting = async(req, res, next) => {
         if (err) {
           next(err);
         } else {
-          // await을 안붙이면 작동이 왜 안될까?
-          await User.findByIdAndUpdate(_id, { $push: { createdVotes: createdVote._id.valueOf() } }).lean();
+          await User.findByIdAndUpdate(_id, { $push: { createdVotes: createdVote._id } }).lean();
           await res.render("index", { user: _id, votes: null, success: true });
         }
       });
@@ -38,10 +38,13 @@ exports.createVoting = async(req, res, next) => {
 }
 
 exports.readVoting = async(req, res, next) => {
-  const { id } = req.params;
+  const voteId = req.params.id;
 
   const userId = req.user === undefined ? undefined : req.user._id.valueOf();
-  const vote = await Vote.findById(id).lean();
+  const vote = await Vote.findById(voteId).lean();
+
+  //vote.isExpired ? vote.isExpired = "투표완료" : vote.isExpired = "투표 진행중";
+  vote.expiredTime = dateFormat(new Date(vote.expiredTime));
 
   try {
     if (!vote.isExpired) {
@@ -55,27 +58,27 @@ exports.readVoting = async(req, res, next) => {
 }
 
 exports.completeVoting = async(req, res, next) => {
-  // 개선 필요
-  const { id } = req.params;
+  const voteId = req.params.id;
+  const userId = req.user._id;
+
   const [ index, option ] = req.body.option.split(",");
 
-  // new ObjectId("").valueOf() -> _id 문자열로 추출
-
   try {
-    await Vote.findByIdAndUpdate(id, { $inc: { [`options.${index}.${option}`]: 1 }, $push: { participants: req.user._id.valueOf() } }).lean();
-    await User.findByIdAndUpdate(req.user._id, { $push: { participatingVotes: id } }).lean();
-    res.redirect(`/votings/${id}`);
+    await Vote.findByIdAndUpdate(voteId, { $inc: { [`options.${index}.${option}`]: 1 }, $push: { participants: userId } }).lean();
+    await User.findByIdAndUpdate(userId, { $push: { participatingVotes: voteId } }).lean();
+    res.redirect(`/votings/${voteId}`);
   } catch (err) {
     next(err);
   }
 }
 
 exports.deleteVoting = async(req, res, next) => {
-  const { id } = req.params;
+  const voteId = req.params.id;
+  console.log(voteId);
 
   try {
     await Vote.findByIdAndDelete(id).lean();
-    await User.findByIdAndUpdate(req.user._id, { $pull: { createdVotes: id.valueOf() }}).lean();
+    await User.findByIdAndUpdate(req.user._id, { $pull: { createdVotes: voteId }}).lean();
     res.render("vote");
   } catch (err) {
     next(err);

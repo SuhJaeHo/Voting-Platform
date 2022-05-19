@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <div>
+    <div class="vote_outline">
       <% if (votes) { %>
         <% if (votes.length === 0) { %>
           <div>
@@ -13,11 +13,11 @@
           </div>
         <% } %>
         <% for (const vote of votes) { %>
-          <div class="voteInfo" onclick="location.href='/votings/<%= vote._id %>'",>
-            <span><%= vote.title %></spn>
-            <span><%= vote.creatorEmail %></span>
-            <span><%= vote.expiredTime %></span>
-            <span><%= vote.isExpired %></span>
+          <div class="voteInfo" onclick="location.href='/votings/<%= vote._id %>'">
+            <p>생성자 : <%= vote.creatorName %></p>
+            <p>제목 : <%= vote.title %></p>
+            <p>투표 만료시간 : <%= vote.expiredTime %></p>
+            <p><%= vote.isExpired %></p>
           </div>  
         <% } %>
       <% } %>

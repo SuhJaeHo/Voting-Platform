@@ -1,0 +1,18 @@
+body {
+  display: flex;
+  justify-content: center;
+}
+
+.title_outline {
+  display: block;
+  width: 30vw;
+  text-align: center;
+  border: 1px solid black;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.options_outline {
+  width: 30vw;
+  border: 1px solid black;
+}

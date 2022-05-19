@@ -2,44 +2,46 @@
 <html>
   <head>
     <title></title>
+    <link rel="stylesheet" href="/stylesheets/createVote.css" />
   </head>
   <body>
     <div>
       <form action="/votings/new" onsubmit="return validate()" method="post" id="form">
-        <div>
-          <input 
+        <div class="option_outline">
+          <input
+            class="title",
             type="text",
             name="title",
             placeholder="제목을 입력하세요",
           />
         </div>
-        <div>
+        <div class="option_outline">
           <input
-            class="options"
+            class="option",
             type="text",
-            name="options",
+            name="option",
             placeholder="선택지 내용을 입력하세요",
           />
         </div>
-        <div>
+        <div class="option_outline">
           <input
-            class="options"
+            class="option"
             type="text",
-            name="options",
+            name="option",
             placeholder="선택지 내용을 입력하세요",
           />
         </div>
-        <div>
+        <div class="date_outline">
           <input 
             type="datetime-local",
             name="expiredTime",
           />
         </div>
-        <div>
+        <div class="submit_outline">
           <input type="submit" value="확인" />
         </div>
       </form>
-      <div>
+      <div class="option_outline">
         <button onclick="addOption()">옵션 추가</button>
         <button onclick="removeOption()">옵션 삭제</button>
       </div>
@@ -49,8 +51,9 @@
     function addOption() {
       const form = document.getElementById("form");
       const div = document.createElement("div");
+      div.className = "option_outline";
       
-      div.innerHTML = "<input class='options' type='text' name='options' placeholder='선택지 내용을 입력하세요' />";      
+      div.innerHTML = "<input class='option' type='text' name='option' placeholder='선택지 내용을 입력하세요' />";      
       form.insertBefore(div, form.getElementsByTagName("div")[3]);
     }
 
@@ -60,7 +63,7 @@
     }
 
     function validate() {
-      const options = document.getElementsByClassName("options");
+      const option = document.getElementsByClassName("option");
       const expiredTime = new Date(document.getElementsByName("expiredTime")[0].value);
       const currentTime = new Date();
       
@@ -69,7 +72,7 @@
         return false;
       }
       
-      for (const option of options) {
+      for (const option of option) {
         if (option.value === "") {
           alert("선택지 내용을 입력하세요");
           return false;
