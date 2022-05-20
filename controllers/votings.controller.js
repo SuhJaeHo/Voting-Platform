@@ -75,6 +75,8 @@ exports.completeVoting = async(req, res, next) => {
 
 exports.deleteVoting = async(req, res, next) => {
   const voteId = req.params.id;
+  console.log(voteId);
+  console.log(await Vote.findById(voteId).lean());
 
   try {
     await Vote.findByIdAndDelete(voteId).lean();
