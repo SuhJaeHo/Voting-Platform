@@ -40,10 +40,11 @@ exports.createVoting = async(req, res, next) => {
 exports.readVoting = async(req, res, next) => {
   const voteId = req.params.id;
 
-  const userId = req.user === undefined ? undefined : req.user._id.valueOf();
-  const vote = await Vote.findById(voteId).lean();
+  const currentTime = new Date();
+  await Vote.updateMany({ expiredTime: { $lt: currentTime }, isExpired: false }, { isExpired: true });
 
-  //vote.isExpired ? vote.isExpired = "투표완료" : vote.isExpired = "투표 진행중";
+  const userId = !req.user ? undefined : req.user._id.valueOf();
+  const vote = await Vote.findById(voteId).lean();
   vote.expiredTime = dateFormat(new Date(vote.expiredTime));
 
   try {
@@ -59,7 +60,7 @@ exports.readVoting = async(req, res, next) => {
 
 exports.completeVoting = async(req, res, next) => {
   const voteId = req.params.id;
-  const userId = req.user._id;
+  const userId = req.user._id.valueOf();
 
   const [ index, option ] = req.body.option.split(",");
 
@@ -74,10 +75,9 @@ exports.completeVoting = async(req, res, next) => {
 
 exports.deleteVoting = async(req, res, next) => {
   const voteId = req.params.id;
-  console.log(voteId);
 
   try {
-    await Vote.findByIdAndDelete(id).lean();
+    await Vote.findByIdAndDelete(voteId).lean();
     await User.findByIdAndUpdate(req.user._id, { $pull: { createdVotes: voteId }}).lean();
     res.render("vote");
   } catch (err) {

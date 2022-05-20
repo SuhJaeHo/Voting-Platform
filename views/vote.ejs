@@ -19,13 +19,10 @@
                   name="option"
                   value="<%= [index, Object.keys(option)[0]] %>"
                 />
-                <% if (vote.isExpired === true && vote.creatorId === userId) { %>
+                <% if (vote.isExpired === true || vote.creatorId === userId) { %>
                   <span><%= Object.keys(option)[0] %></span>
                   <span><%= option[Object.keys(option)[0]] %></span><span>표</span>
-                <% } else if (vote.isExpired === true) { %>
-                  <span><%= Object.keys(option)[0] %></span>
-                  <span><%= option[Object.keys(option)[0]] %></span><span>표</span>
-                <% } else { %>
+                <% } else { %> 
                   <%= Object.keys(option)[0] %>
                 <% } %>
                 <br />
@@ -79,6 +76,13 @@
         alert("이미 투표를 완료하셨습니다");
         return false;
       }
+
+      for (const element of document.getElementsByName("option")) {
+        if (element.checked) return true;
+      }
+
+      alert("투표할 항목을 선택하세요");
+      return false;
     }
   </script>
 </html>
