@@ -38,7 +38,11 @@
             <h1><%= vote.title %></h1>
             <p>작성자 : <%= vote.creatorName %></p>
             <p>투표 마감시간 : <%= vote.expiredTime %></p>
-            <p><%= vote.isExpired %></p>
+            <% if (vote.isExpired) { %>
+              <h3 class="expired-text">투표마감</h3>
+            <% } else { %>
+              <h3 class="ongoing-text">투표 진행중</h3>
+            <% } %> 
           </div>
         <% } %>
       <% } %>

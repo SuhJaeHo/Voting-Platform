@@ -12,7 +12,6 @@ router.get("/", async(req, res, next) => {
     await Vote.updateMany({ expiredTime: { $lt: currentTime }, isExpired: false }, { isExpired: true });
 
     const votes = (await Vote.find({}).lean()).map((vote) => {
-      vote.isExpired ? vote.isExpired = "투표마감" : vote.isExpired = "투표 진행중";
       vote.expiredTime = dateFormat(new Date(vote.expiredTime));
 
       return vote;
