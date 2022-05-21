@@ -9,7 +9,7 @@ exports.getMyVoting = async(req, res, next) => {
   
   for (const vote of createdVotes) {
     vote.expiredTime = dateFormat(new Date(vote.expiredTime));
-    vote.isExpired ? vote.isExpired = "투표완료" : vote.isExpired = "투표 진행중";
+    vote.isExpired ? vote.isExpired = "투표마감" : vote.isExpired = "투표 진행중";
   }
 
   res.render("myVotes", { createdVotes });

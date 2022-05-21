@@ -44,6 +44,7 @@ exports.readVoting = async(req, res, next) => {
   await Vote.updateMany({ expiredTime: { $lt: currentTime }, isExpired: false }, { isExpired: true });
 
   const userId = !req.user ? undefined : req.user._id.valueOf();
+
   const vote = await Vote.findById(voteId).lean();
   vote.expiredTime = dateFormat(new Date(vote.expiredTime));
 
@@ -67,6 +68,7 @@ exports.completeVoting = async(req, res, next) => {
   try {
     await Vote.findByIdAndUpdate(voteId, { $inc: { [`options.${index}.${option}`]: 1 }, $push: { participants: userId } }).lean();
     await User.findByIdAndUpdate(userId, { $push: { participatingVotes: voteId } }).lean();
+    
     res.redirect(`/votings/${voteId}`);
   } catch (err) {
     next(err);
@@ -75,8 +77,6 @@ exports.completeVoting = async(req, res, next) => {
 
 exports.deleteVoting = async(req, res, next) => {
   const voteId = req.params.id;
-  console.log(voteId);
-  console.log(await Vote.findById(voteId).lean());
 
   try {
     await Vote.findByIdAndDelete(voteId).lean();

@@ -3,47 +3,51 @@
   <head></head>
   <link rel="stylesheet" href="/stylesheets/vote.css" />
   <body>
-    <div>
-      <div class="title_outline">
-        <p><%= vote.title %></p>
-        <p>투표 만료시간 : <%= vote.expiredTime %></p>
-        <p><%= vote.isExpired ? "투표완료" : "투표 진행중" %></p>
-      </div>
-      <div>
-        <form action="/votings/<%= vote._id %>" onsubmit="return validate()" method="post">
-          <div class="options_outline">
-            <% vote.options.forEach((option, index) => { %>
-              <label>
-                <input
-                  type="radio"
-                  name="option"
-                  value="<%= [index, Object.keys(option)[0]] %>"
-                />
-                <% if (vote.isExpired === true || vote.creatorId === userId) { %>
-                  <span><%= Object.keys(option)[0] %></span>
-                  <span><%= option[Object.keys(option)[0]] %></span><span>표</span>
-                <% } else { %> 
-                  <%= Object.keys(option)[0] %>
-                <% } %>
-                <br />
-              </label>
-            <% }) %>
+    <div class="">
+      <button onclick="location.href='/'">투표목록</button>
+    </div>
+    <div class="vote-container">
+      <h1><%= vote.title %></h1>
+      <p>투표 마감시간 : <%= vote.expiredTime %></p>
+      <% if (vote.isExpired) { %>
+        <h3>투표마감</h3>
+      <% } else { %>
+        <h3>투표 진행중</h3>
+      <% } %> 
+    </div>
+    <div class="option-container">
+      <form id="vote-form" action="/votings/<%= vote._id %>" onsubmit="return validate()" method="post">
+        <% vote.options.forEach((option, index) => { %>
+          <div class="option-content">
+            <input
+              type="radio"
+              name="option"
+              value="<%= [index, Object.keys(option)[0]] %>"
+            />
+            <% if (vote.isExpired === true || vote.creatorId === userId) { %>
+              <div class="option-name"><%= Object.keys(option)[0] %></div>
+              <div class="option-count"><%= option[Object.keys(option)[0]] %>표</div>
+            <% } else { %> 
+              <%= Object.keys(option)[0] %>
+            <% } %>
+            <br />
           </div>
-          <input type="submit" value="투표" />
-        </form>
-      </div>
+        <% }) %>  
+      </form>
+    </div>
+    <div class="bottom-container">
       <div>
-        <button onclick="location.href='/'">투표목록</button>
-      </div>
-      <% if (vote.creatorId === userId) { %>
-        <div>
+        <button type="submit" form="vote-form">투표</button>
+        <% if (vote.creatorId === userId) { %>
           <button onclick="remove()">삭제</button>
-        </div>
-      <% } %>
+        <% } %>
+      </div>
     </div>
   </body>
   <script type="text/javascript">
     if (("<%= vote.isExpired %>") === "true") {
+      document.getElementsByTagName("h3")[0].style.color = "red";
+
       for (const element of document.getElementsByName("option")) {
         element.disabled = true;
       }

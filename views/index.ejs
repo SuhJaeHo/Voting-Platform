@@ -2,37 +2,47 @@
 <html>
   <head>
     <title></title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/index.css" />
+    <link rel="stylesheet" href="/stylesheets/header.css" />
   </head>
   <body>
-    <div class="vote_outline">
-      <% if (votes) { %>
-        <% if (votes.length === 0) { %>
+    <header>
+      <% if (user) { %>
+        <div class="left">
+          <h2><%= user.name %></h2><span> 님 환영합니다</span>
+        </div>
+        <div class="right">
+          <a href="/logout">로그아웃</a>
+          <a href="/my-votings">마이페이지</a>
+          <a href="/votings/new">투표생성</a>
+        </div>
+      <% } else { %>
+        <div class="left">
+          <a href="/votings/new">투표생성</a>
+        </div>
+      <% } %>
+      <div class="clear"></div>
+      <div class="line">
+        <hr />
+      </div>
+    </header>
+    <div class="container">
+      <% if (votes) { %> 
+        <% if (!votes.length) { %>
           <div>
-            <h1>등록된 투표가 없습니다</h1>
+            <p>등록된 투표가 없습니다</p>
           </div>
         <% } %>
         <% for (const vote of votes) { %>
-          <div class="voteInfo" onclick="location.href='/votings/<%= vote._id %>'">
-            <p>생성자 : <%= vote.creatorName %></p>
-            <p>제목 : <%= vote.title %></p>
-            <p>투표 만료시간 : <%= vote.expiredTime %></p>
+          <div class="content" onclick="location.href='/votings/<%= vote._id %>'">
+            <h1><%= vote.title %></h1>
+            <p>작성자 : <%= vote.creatorName %></p>
+            <p>투표 마감시간 : <%= vote.expiredTime %></p>
             <p><%= vote.isExpired %></p>
-          </div>  
+          </div>
         <% } %>
       <% } %>
     </div>
-    <div>
-      <button
-        onclick="location.href='/votings/new'";
-      >
-        투표생성
-      </button>
-    </div>
-    <% if (user) { %>
-      <a href="/logout">로그아웃</a>
-      <a href="/my-votings">마이페이지</a>
-    <% } %>
   </body>
   <script type="text/javascript">
     if ("<%= success %>" === "true") {

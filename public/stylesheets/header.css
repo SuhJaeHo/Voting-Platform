@@ -1,0 +1,37 @@
+body > header {
+  font-size: 18px;
+}
+
+header h2 {
+  display: inline;
+}
+
+header a {
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+header a:visited {
+  color: black;
+}
+
+header a:hover {
+  color: #00B7FF;
+}
+
+header .left {
+  float: left;
+}
+
+header .right {
+  float: right;
+}
+
+header .clear {
+  clear: both;
+}
+
+header .line {
+  margin-top: 10px;
+  align-items: center;
+}

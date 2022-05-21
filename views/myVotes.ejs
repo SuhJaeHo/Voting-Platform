@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head></head>
-  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <head>
+    <link rel="stylesheet" href="/stylesheets/index.css" />
+    <link rel="stylesheet" href="/stylesheets/header.css" />
+  </head>
   <body>
-    <div class="vote_outline">
+    <header>
+      <div class="left">
+        <a href="/">투표목록</a>
+      </div>
+      <div class="clear"></div>
+      <div class="line">
+        <hr />
+      </div>
+    </header>
+    <div class="container">
       <% if (createdVotes.length === 0) { %>
         <div>아직 등록한 투표가 없습니다</div>
       <% } %>
       <% for (const vote of createdVotes) { %>
-        <div class="voteInfo" onclick="location.href='/votings/<%= vote._id %>'">
-          <p>제목 : <%= vote.title %></p>
-          <p>투표 만료시간 : <%= vote.expiredTime %></p>
+        <div class="content" onclick="location.href='/votings/<%= vote._id %>'">
+          <h1><%= vote.title %></h1>
+          <p>투표 마감시간 : <%= vote.expiredTime %></p>
           <p><%= vote.isExpired %></p>
         </div>    
       <% } %>
-    </div>
-    <div>
-      <button onclick="location.href='/'">투표목록</button>
     </div>
   </body>
 </html>
